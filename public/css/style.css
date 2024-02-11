@@ -1,0 +1,83 @@
+.navbar{
+    height: 5rem;
+    background-color: white;
+}
+
+.fa-compass{
+    color: #fe424d;
+    font-size: 2rem;
+}
+
+.nav-link{
+    color: #222222 !important;
+}
+
+/* footer */
+
+.f-info-links a{
+    text-decoration: none;
+    color: #222222;
+}
+.f-info-links ,.f-info-socials{
+    width: 100%;
+}
+.card-body:hover{
+    opacity: 0.8;
+}
+.container{
+    flex: 1;
+}
+
+.f-info-socials i{
+    margin-right: 2rem;
+    font-size: 1.2rem;
+}
+.f-info-brand{
+    width: 100%;
+    background-color: blueviolet;
+}
+h1{
+    font-family:'Times New Roman', Times, serif;
+}
+
+.f-info-links a:hover{
+    text-decoration:underline;
+
+}
+img{
+    height:242px;
+    width: 255.5px;
+    border-radius: 0.4rem;
+}
+ol{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    flex-direction: row;
+;
+.card{
+    border:none;
+}
+}
+
+
+.f-info{
+    display: flex;
+    height: 8rem;
+    background-color: #ebebeb;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: space;
+    text-align: center;
+    align-items: center;
+}
+.listing-link{
+    text-decoration: none;
+}
+.card-img-overlay{
+    opacity: 0;
+}
+
+.card-img-overlay:hover{
+    opacity:0.2;
+}
