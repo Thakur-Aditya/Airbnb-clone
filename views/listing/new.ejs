@@ -1,38 +1,90 @@
 <% layout("/layouts/boilerplate") %>
 <body>
-    <h1>Create New Listing</h1>
-    <form action="/listing" method="post">
-        <div class="mb-3">
-            <label for="title" class="form-label">Enter Title</label>
-            <input type="text" id="title" name="title" placeholder="Enter the Title" class="form-control"> <br>
-        </div>
-        <div class="mb-3">
-            <label for="description" class="form-label">Enter Description</label>
-            <textarea id="description" name="description" placeholder="Enter description" cols="30" class="form-control" rows="10"></textarea><br>
-        </div>
-        <div class="mb-3">
-            <label for="image" class="form-label">Enter Image URL/link</label>
-            <input id="image" type="text" name="image" placeholder="Enter url of your image" class="form-control"><br>
-        </div>
-        <div class="row">
-            <div class="mb-3 col-4">
-                <label for="price" class="form-label">Enter Price</label>
-                <input id="price" type="number" name="price" placeholder="Enter Price" class="form-control" > <br>
-            </div>
+  <h1>Create New Listing</h1>
+  <form action="/listing" method="post" class="needs-validation" novalidate>
+    <div class="mb-3">
+      <label for="title" class="form-label">Enter Title</label>
+      <input
+        type="text"
+        id="title"
+        name="title"
+        placeholder="Enter the Title"
+        class="form-control"
+        required
+      />
 
-            <div class="mb-3 col-md-8">
-                <label for="country" class="form-label">Enter Country</label>
-                <input id="country" type="text" name="country" placeholder="Enter Country" class="form-control"> <br>
-            </div>
-        </div>
+      <div class="valid-feedback">Title looks good</div>
+    </div>
+    <div class="mb-3">
+      <label for="description" class="form-label">Enter Description</label>
+      <textarea
+        id="description"
+        required
+        name="description"
+        placeholder="Enter description"
+        cols="30"
+        class="form-control"
+        rows="10"
+      ></textarea>
 
-        <div class="mb-3">
-            <label for="location" class="form-label">Enter Location</label>
-        <input id="location" type="text" name="location" placeholder="Enter Location" class="form-control"><br>
-        </div>
+      <div class="invalid-feedback">Please add description</div>
+    </div>
 
-        
-        <button class="btn btn-danger">Submit</button>
-        <br><br><br>
-    </form>
+    <div class="mb-3">
+      <label for="image" class="form-label">Enter Image URL/link</label>
+      <input
+        id="image"
+        type="text"
+        name="image"
+        placeholder="Enter url of your image"
+        class="form-control"
+      />
+    </div>
+    <div class="row">
+      <div class="mb-3 col-4">
+        <label for="price" class="form-label">Enter Price</label>
+        <input
+          id="price"
+          type="number"
+          required
+          name="price"
+          placeholder="Enter Price"
+          class="form-control"
+        />
+
+        <div class="invalid-feedback">Please enter a valid price</div>
+      </div>
+
+      <div class="mb-3 col-md-8">
+        <label for="country" class="form-label">Enter Country</label>
+        <input
+          id="country"
+          required
+          type="text"
+          name="country"
+          placeholder="Enter Country"
+          class="form-control"
+        />
+
+        <div class="invalid-feedback">Enter the country!</div>
+      </div>
+
+      <div class="mb-3">
+        <label for="location" class="form-label">Enter Location</label>
+        <input
+          id="location"
+          type="text"
+          required
+          name="location"
+          placeholder="Enter Location"
+          class="form-control"
+          <div
+          class="invalid-feedback"
+        />Enter the location
+      </div>
+    </div>
+    <button class="btn btn-danger">Submit</button>
+
+    <br /><br /><br />
+  </form>
 </body>
