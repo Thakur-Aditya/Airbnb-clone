@@ -6,17 +6,18 @@
       <h1>Edit your listing</h1>
 
       <form
-        action="/listing/<%=listing._id%>?_method=PUT"
+        action="/listings/<%=listing._id%>?_method=PUT"
         method="post"
         novalidate
         class="needs-validation"
+        enctype="multipart/form-data"
       >
         <div class="mb-3">
           <label for="title" class="form-label">Enter Title</label>
           <input
             type="text"
             id="title"
-            name="title"
+            name="listing[title]"
             placeholder="Enter the Title"
             class="form-control"
             required
@@ -29,7 +30,7 @@
           <label for="description" class="form-label">Enter Description</label>
           <textarea
             id="description"
-            name="description"
+            name="listing[description]"
             placeholder="Enter description"
             cols="30"
             class="form-control"
@@ -41,15 +42,14 @@
           <div class="invalid-feedback">Please enter a valid Description</div>
           <br />
         </div>
+        <img src="<%= listing.image.url %>" alt="<%= listing.image.filename %>" class="editimg">
         <div class="mb-3">
-          <label for="image" class="form-label">Enter Image URL/link</label>
+          <label for="image" class="form-label">Upload New Image</label>
           <input
             id="image"
-            type="text"
-            name="image"
-            placeholder="Enter url of your image"
+            type="file"
+            name="listing[image]"
             class="form-control"
-            value="<%=listing.image%>"
           /><br />
         </div>
         <div class="row">
@@ -57,9 +57,9 @@
             <label for="price" class="form-label">Enter Price</label>
             <input
               id="price"
-              type="number"
+              type="listing[number]"
               required
-              name="price"
+              name="listing[price]"
               placeholder="Enter Price"
               class="form-control"
               value="<%=listing.price%>"
@@ -73,7 +73,7 @@
             <input
               id="country"
               type="text"
-              name="country"
+              name="listing[country]"
               required
               placeholder="Enter Country"
               class="form-control"
@@ -89,7 +89,7 @@
           <input
             id="location"
             type="text"
-            name="location"
+            name="listing[location]"
             placeholder="Enter Location"
             required
             class="form-control"

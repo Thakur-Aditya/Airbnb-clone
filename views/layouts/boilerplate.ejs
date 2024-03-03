@@ -18,10 +18,14 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <link rel="stylesheet" href="/css/rating.css">
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.css" rel="stylesheet">
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.2.0/mapbox-gl.js"></script>
   </head>
   <body>
     <%- include("../includes/navbar.ejs") %>
     <br />
+    <%- include("../includes/flash.ejs") %>
     <div class="container"><%- body %></div>
     <%- include("../includes/footer.ejs") %>
     <script

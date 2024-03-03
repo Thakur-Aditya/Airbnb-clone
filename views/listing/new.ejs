@@ -1,13 +1,19 @@
 <% layout("/layouts/boilerplate") %>
 <body>
   <h1>Create New Listing</h1>
-  <form action="/listing" method="post" class="needs-validation" novalidate>
+  <form
+    action="/listings"
+    method="post"
+    class="needs-validation"
+    novalidate
+    enctype="multipart/form-data"
+  >
     <div class="mb-3">
       <label for="title" class="form-label">Enter Title</label>
       <input
         type="text"
         id="title"
-        name="title"
+        name="listing[title]"
         placeholder="Enter the Title"
         class="form-control"
         required
@@ -20,7 +26,7 @@
       <textarea
         id="description"
         required
-        name="description"
+        name="listing[description]"
         placeholder="Enter description"
         cols="30"
         class="form-control"
@@ -31,12 +37,11 @@
     </div>
 
     <div class="mb-3">
-      <label for="image" class="form-label">Enter Image URL/link</label>
+      <label for="imagefile" class="form-label">Upload listing image</label>
       <input
-        id="image"
-        type="text"
-        name="image"
-        placeholder="Enter url of your image"
+        id="imagefile"
+        type="file"
+        name="listing[image]"
         class="form-control"
       />
     </div>
@@ -45,9 +50,8 @@
         <label for="price" class="form-label">Enter Price</label>
         <input
           id="price"
-          
           required
-          name="price"
+          name="listing[price]"
           placeholder="Enter Price"
           class="form-control"
         />
@@ -61,7 +65,7 @@
           id="country"
           required
           type="text"
-          name="country"
+          name="listing[country]"
           placeholder="Enter Country"
           class="form-control"
         />
@@ -75,7 +79,7 @@
           id="location"
           type="text"
           required
-          name="location"
+          name="listing[location]"
           placeholder="Enter Location"
           class="form-control"
           <div

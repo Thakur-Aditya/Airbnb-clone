@@ -1,29 +1,26 @@
 <% layout("/layouts/boilerplate") %>
 <body>
-    <h1>Listings</h1>
-    <!-- <form action="/listings/new">
+  <h1>Listings</h1>
+  <!-- <form action="/listings/new">
         <button>Create New Listing</button>
     </form> -->
-    <ol>
-        <% for(listing of allListings){ %>
-            <a href="/listings/<%=listing._id%>" class="listing-link">
-                <div class="card row" style="width: 18rem;"> 
-                    <div class="card-body">
-                        
-                        <img src="<%= listing.image%>" class="card-img-top" alt="...">
-                        <p class="card-text"><%= listing.title%> <br><%= listing.price%>/night
-                        </p>
-                        <!-- <p class="card-text"><%= listing.description%></p> -->
-                        <!-- <p class="card-text"><%= listing.price%></p> -->
-                        <!-- <p class="card-text"><%= listing.location%></p> -->
-                        <!-- <p class="card-text"><%= listing.country%></p> -->
-                    </div>
-                </div>
-            </a>
-        <%}%>
-    </ol>
+  <ol>
+    <% for(listing of allListings){ %>
+    <a href="/listings/<%=listing._id%>" class="listing-link">
+      <div class="card row" style="width: 18rem">
+        <div class="card-body">
+          <img src="<%= listing.image.url%>" class="card-img-top" alt="..." />
+          <p class="card-text">
+            <%= listing.title%> <br /><%= listing.price.toLocaleString("en-IN")
+            %>/night
+          </p>
+          <!-- <p class="card-text"><%= listing.description%></p> -->
+          <!-- <p class="card-text"><%= listing.price.toLocaleString("en-IN") %></p> -->
+          <!-- <p class="card-text"><%= listing.location%></p> -->
+          <!-- <p class="card-text"><%= listing.country%></p> -->
+        </div>
+      </div>
+    </a>
+    <%}%>
+  </ol>
 </body>
-
-    
-
-    

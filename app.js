@@ -1,16 +1,29 @@
+if (process.env.NODE_ENV != "production") {
+  require("dotenv").config();
+}
+
+console.log(process.env.CLOUD_NAME);
+
 const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const path = require("path");
 const ejsMate = require("ejs-mate");
-const Listing = require("./models/listing.js");
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+// const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
+const dbUrl = process.env.ATLASDB_URL;
+
 const methodOverride = require("method-override");
-const wrapAsync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExpressError.js");
-// const { listingSchemaa } = require("./utils/schema.js");
-const { wrap } = require("module");
-const Joi = require("joi");
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
+const flash = require("connect-flash");
+const passport = require("passport"); //passport
+const LocalStrategy = require("passport-local");
+const User = require("./models/user.js"); //Modelrequired
+
+const listingsRouter = require("./routes/listing.js");
+const reviewsRouter = require("./routes/reviews.js");
+const userRouter = require("./routes/user.js");
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -19,21 +32,50 @@ app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.urlencoded({ extended: true }));
 
-const listingSchemaa = Joi.object({
-  listing: Joi.object({
-    title: Joi.string().required(),
-    description: Joi.string().required(),
-    location: Joi.string().required(),
-    country: Joi.string().required(),
-    price: Joi.number().required().min(0),
-    image: Joi.string().allow("", null),
-  }).required(),
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  crypto: {
+    secret: process.env.SECRET,
+  },
+  touchAfter: 24 * 3600,
 });
+
+store.on("error", () => {
+  console.log("Error in Mongo Store", err);
+});
+
+const sessionOptions = {
+  store: store,
+  secret: process.env.SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+  },
+};
+
+app.use(session(sessionOptions));
+app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+app.use((req, res, next) => {
+  res.locals.successMessage = req.flash("success");
+  res.locals.errorMessage = req.flash("error");
+  res.locals.currentUser = req.user;
+  console.log("i had already defined current  user");
+  next();
+});
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // Function to connect to DB
 
 async function main() {
-  await mongoose.connect(MONGO_URL);
+  await mongoose.connect(dbUrl);
 }
 
 //Connecting to DB
@@ -46,110 +88,15 @@ main()
     console.log(err);
   });
 
-const validateListing = (req, res, next) => {
-  let error = listingSchemaa.validate(req.body);
-  console.log(error);
-  console.log("error is being called");
-  if (error.error) {
-    console.log("I am throwing error");
-    throw new ExpressError(400, "finally");
-  } else {
-    console.log("next is being called");
-    next();
-  }
-};
 //Root Route
 
 app.get("/", (req, res) => {
   res.send("Working");
 });
 
-//For all Listings
-
-app.get(
-  "/listings",
-  wrapAsync(async (req, res) => {
-    allListings = await Listing.find({});
-    res.render("./listing/index.ejs", { allListings });
-  })
-);
-
-//Form send for New Listing
-
-app.get("/listings/new", (req, res) => {
-  res.render("./listing/new.ejs");
-});
-
-// Read-Show Route
-
-app.get(
-  "/listings/:id",
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    let listing = await Listing.findById(id);
-    res.render("./listing/show.ejs", { listing });
-  })
-);
-
-// Edit Form Sent for Update Route
-
-app.get(
-  "/listing/:id/edit",
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    let listing = await Listing.findById(id);
-    res.render("./listing/edit.ejs", { listing });
-  })
-);
-
-//Update Route in DB
-
-app.put(
-  "/listing/:id",
-  wrapAsync(async (req, res) => {
-    if (!req.body.listing) {
-      throw new ExpressError(400, "bhosdike aaukaat me reh le");
-    }
-    let { id } = req.params;
-    let data = req.body;
-    let newListing = new Listing(data);
-    await Listing.findByIdAndUpdate(id, { ...data });
-    res.redirect(`/listings/${id}`);
-  })
-);
-
-//For saving New Listing to DB
-
-app.post(
-  "/listing",
-  validateListing,
-  wrapAsync(async (req, res, next) => {
-    // if (!req.body.listing) {
-    //   throw new ExpressError(400, "bhosdike aaukaat me reh le");
-    // }
-    // let error = listingSchemaa.validate(req.body);
-    // console.log(error.error);
-    // if (error.error) {
-    //   throw new ExpressError(400, error.error);
-    // }
-
-    let data = req.body;
-    let newListing = new Listing(data);
-    await newListing.save();
-    res.redirect("/listings");
-  })
-);
-
-// Delete Route
-
-app.delete(
-  "/listing/:id",
-  wrapAsync(async (req, res) => {
-    let { id } = req.params;
-    await Listing.findOneAndDelete({ _id: id });
-    res.redirect("/listings");
-  })
-);
+app.use("/listings", listingsRouter);
+app.use("/listings/:id/reviews", reviewsRouter);
+app.use("/", userRouter);
 
 //for all other false routes
 app.all("*", (res, req, next) => {
@@ -158,7 +105,7 @@ app.all("*", (res, req, next) => {
 //middleware for error handling
 app.use((err, req, res, next) => {
   let { statusCode = 500, message = "Sometiong Went wrong" } = err;
-  //   res.status(statusCode).send(message);
+  res.status(statusCode);
   res.render("error.ejs", { message });
   // res.send("Something went wrong");
 });

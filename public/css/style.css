@@ -82,6 +82,16 @@ ol {
   /* position: absolute; */
   /* position: sticky; */
 
-position: inherit;  /* width: 100%; */
+  position: inherit; /* width: 100%; */
   bottom: 0;
+}
+
+.editimg {
+  height: 4rem;
+  width: 4rem;
+}
+
+#map {
+  height: 400px;
+  width: 800px;
 }
