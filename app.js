@@ -91,7 +91,7 @@ main()
 //Root Route
 
 app.get("/", (req, res) => {
-  res.send("Working");
+  res.redirect("/listings");
 });
 
 app.use("/listings", listingsRouter);
